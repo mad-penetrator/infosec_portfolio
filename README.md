@@ -53,32 +53,32 @@
 ------------------------------------------
 - Шаблоны команд (grep/regex) для поиска brute-force SSH
 - IPv4 (устойчивее, чем через awk)
-grep -h "Failed password" week5-incidents/ssh_auth.log \
+- grep -h "Failed password" week5-incidents/ssh_auth.log \
 | grep -Po 'from \K([0-9]{1,3}\.){3}[0-9]{1,3}' \
 | sort | uniq -c | sort -nr
 
 - IPv6 (или «любой адрес после from»)
-grep -h "Failed password" week5-incidents/ssh_auth.log \
+- grep -h "Failed password" week5-incidents/ssh_auth.log \
 | grep -Po 'from \K([0-9a-fA-F:]+)' \
 | sort | uniq -c | sort -nr
 
 - Объединённый (попытка покрыть IPv4/IPv6 одним выражением)
-grep -h "Failed password" week5-incidents/ssh_auth.log \
+- grep -h "Failed password" week5-incidents/ssh_auth.log \
 | grep -Po 'from \K((([0-9]{1,3}\.){3}[0-9]{1,3})|([0-9a-fA-F:]+))' \
 | sort | uniq -c | sort -nr
 --------------------------------------------
 - Шаблон отчёта о подозрительном процессе (Sysmon, EventID=1):
-Событие: Sysmon EventID=1 (Process Create)
-Время (UTC): <YYYY-MM-DD HH:MM:SS.mmm>
-Пользователь: <DOMAIN\user или SID, если доступно>
+- Событие: Sysmon EventID=1 (Process Create)
+- Время (UTC): <YYYY-MM-DD HH:MM:SS.mmm>
+- Пользователь: <DOMAIN\user или SID, если доступно>
 
-Image: <полный путь к бинарнику, напр. C:\Users\<user>\AppData\Local\Temp\evil.exe>
-CommandLine: <полная командная строка>
-ParentImage: <родительский процесс, напр. C:\Windows\System32\cmd.exe>
-ParentCommandLine: <если доступно>
-Hashes: <MD5/SHA256, если в событии есть>
-IntegrityLevel: <Low/Medium/High/System, если есть>
-Signed: <подписан/не подписан, издатель>
+- Image: <полный путь к бинарнику, напр. C:\Users\<user>\AppData\Local\Temp\evil.exe>
+- CommandLine: <полная командная строка>
+- ParentImage: <родительский процесс, напр. C:\Windows\System32\cmd.exe>
+- ParentCommandLine: <если доступно>
+- Hashes: <MD5/SHA256, если в событии есть>
+- IntegrityLevel: <Low/Medium/High/System, если есть>
+- Signed: <подписан/не подписан, издатель>
 
 Признаки подозрительности:
 - [ ] Нетипичный путь (Temp/AppData/Profiles/Downloads и т.п.)
