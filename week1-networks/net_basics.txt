@@ -1,0 +1,19 @@
+default via 10.0.2.2 dev enp0s3 proto dhcp src 10.0.2.15 metric 100 
+10.0.2.0/24 dev enp0s3 proto kernel scope link src 10.0.2.15 metric 100 
+10.0.2.2 dev enp0s3 proto dhcp scope link src 10.0.2.15 metric 100 
+172.17.0.2 via 10.0.2.2 dev enp0s3 proto dhcp src 10.0.2.15 metric 100 
+192.168.0.1 via 10.0.2.2 dev enp0s3 proto dhcp src 10.0.2.15 metric 100 
+Netid State  Recv-Q Send-Q    Local Address:Port  Peer Address:PortProcess
+udp   UNCONN 0      0         127.0.0.53%lo:53         0.0.0.0:*          
+udp   UNCONN 0      0      10.0.2.15%enp0s3:68         0.0.0.0:*          
+udp   ESTAB  0      0             10.0.2.15:57998  192.168.0.1:53         
+tcp   LISTEN 0      4096      127.0.0.53%lo:53         0.0.0.0:*          
+PING google.com (142.250.184.206) 56(84) bytes of data.
+64 bytes from fra24s11-in-f14.1e100.net (142.250.184.206): icmp_seq=1 ttl=255 time=0.521 ms
+64 bytes from fra24s11-in-f14.1e100.net (142.250.184.206): icmp_seq=2 ttl=255 time=0.576 ms
+64 bytes from fra24s11-in-f14.1e100.net (142.250.184.206): icmp_seq=3 ttl=255 time=0.679 ms
+64 bytes from fra24s11-in-f14.1e100.net (142.250.184.206): icmp_seq=4 ttl=255 time=0.659 ms
+
+--- google.com ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3006ms
+rtt min/avg/max/mdev = 0.521/0.608/0.679/0.063 ms
