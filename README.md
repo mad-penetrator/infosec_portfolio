@@ -51,7 +51,7 @@
 - Разбор процесса: sysmon_sample.xml + отчёт sysmon_report.txt.
 
 ------------------------------------------
-- Шаблоны команд (grep/regex) для поиска brute-force SSH
+//Шаблоны команд (grep/regex) для поиска brute-force SSH
 - IPv4 (устойчивее, чем через awk)
 - grep -h "Failed password" week5-incidents/ssh_auth.log \
 | grep -Po 'from \K([0-9]{1,3}\.){3}[0-9]{1,3}' \
@@ -67,7 +67,7 @@
 | grep -Po 'from \K((([0-9]{1,3}\.){3}[0-9]{1,3})|([0-9a-fA-F:]+))' \
 | sort | uniq -c | sort -nr
 --------------------------------------------
-- Шаблон отчёта о подозрительном процессе (Sysmon, EventID=1):
+//Шаблон отчёта о подозрительном процессе (Sysmon, EventID=1):
 - Событие: Sysmon EventID=1 (Process Create)
 - Время (UTC): <YYYY-MM-DD HH:MM:SS.mmm>
 - Пользователь: <DOMAIN\user или SID, если доступно>
