@@ -1,0 +1,14 @@
+<Event>
+  <System>
+    <Provider Name="Microsoft-Windows-Sysmon" />
+    <EventID>1</EventID>
+  </System>
+  <EventData>
+    <Data Name="UtcTime">2023-01-12 10:20:30.123</Data>
+    <Data Name="ProcessGuid">{11111111-2222-3333-4444-555555555555}</Data>
+    <Data Name="ProcessId">4321</Data>
+    <Data Name="Image">C:\Users\admin\AppData\Local\Temp\evil.exe</Data>
+    <Data Name="CommandLine">evil.exe --steal-data</Data>
+    <Data Name="ParentImage">C:\Windows\System32\cmd.exe</Data>
+  </EventData>
+</Event>

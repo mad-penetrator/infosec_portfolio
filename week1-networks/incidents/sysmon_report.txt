@@ -1,0 +1,11 @@
+Событие: Sysmon EventID=1 (Process Create)
+Время (UTC): ...
+Image: C:\Users\admin\AppData\Local\Temp\evil.exe
+CommandLine: evil.exe --steal-data
+ParentImage: C:\Windows\System32\cmd.exe
+Пользователь: ...
+Хеши (MD5/SHA256): ...
+Оценка: Высокая подозрительность (Temp, атипичное имя, вредоносные аргументы, parent=cmd)
+
+Рекомендации: изоляция хоста, сбор артефактов (prefetch, Shimcache, Amcache, журнал Sysmon 1/3),
+проверка автозапуска, сетевых соединений, IOC-поиск по всей сети.

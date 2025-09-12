@@ -1,0 +1,4 @@
+Jan 12 10:15:12 ubuntu sshd[1234]: Failed password for root from 185.12.45.67 port 45123 ssh2
+Jan 12 10:15:14 ubuntu sshd[1234]: Failed password for root from 185.12.45.67 port 45124 ssh2
+Jan 12 10:15:16 ubuntu sshd[1234]: Failed password for root from 185.12.45.67 port 45125 ssh2
+Jan 12 10:15:20 ubuntu sshd[1234]: Failed password for admin from 192.168.0.50 port 60222 ssh2
