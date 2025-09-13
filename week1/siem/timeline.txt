@@ -1,0 +1,4 @@
+[10:00:00] | ubuntu-serv | auth.log | SSH brute-force | 50× Failed password с 185.12.45.67 | high
+[10:05:12] | ubuntu-serv | auth.log | Успешный вход | user=root src=185.12.45.67 | high
+[10:06:05] | ubuntu-serv | bash history/pcap | Загрузка | wget http://…/evil.exe -> Temp | medium
+[10:07:10] | ubuntu-serv | Sysmon(EventID=3)/pcap | C2 подключение | evil.exe → 45.67.89.10:4444 | high
