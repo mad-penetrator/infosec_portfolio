@@ -51,7 +51,7 @@
 - Разбор процесса: sysmon_sample.xml + отчёт sysmon_report.txt.
 
 ------------------------------------------
-//Шаблоны команд (grep/regex) для поиска brute-force SSH
+// Шаблоны команд (grep/regex) для поиска brute-force SSH
 - IPv4 (устойчивее, чем через awk)
 - grep -h "Failed password" week5-incidents/ssh_auth.log \
 | grep -Po 'from \K([0-9]{1,3}\.){3}[0-9]{1,3}' \
@@ -67,7 +67,7 @@
 | grep -Po 'from \K((([0-9]{1,3}\.){3}[0-9]{1,3})|([0-9a-fA-F:]+))' \
 | sort | uniq -c | sort -nr
 --------------------------------------------
-//Шаблон отчёта о подозрительном процессе (Sysmon, EventID=1):
+// Шаблон отчёта о подозрительном процессе (Sysmon, EventID=1):
 - Событие: Sysmon EventID=1 (Process Create)
 - Время (UTC): <YYYY-MM-DD HH:MM:SS.mmm>
 - Пользователь: <DOMAIN\user или SID, если доступно>
@@ -97,3 +97,27 @@
 4) Поиск по IOC (хеш/имя/командная строка/родитель) на других хостах.
 5) Проверка автозапуска и сетевых соединений, удаление/блокировка, восстановление доверенных конфигураций.
 
+## Неделя 7–8 — SIEM и таймлайн инцидента
+Цели:
+- Познакомиться с концепцией SIEM (Security Information and Event Management).
+- Научиться собирать системные события в JSON-формате.
+- Составить учебный таймлайн инцидента (цепочку действий атакующего).
+- Сформировать базовый отчёт («топ команд sudo»).
+
+Выполнено:
+- Имитация работы Filebeat: сбор логов через journalctl в JSON:
+-- journalctl -n 80 -o json > week7-siem/filebeat_sample.json
+- получен файл filebeat_sample.json с последними системными событиями.
+- Построен отчёт по командам sudo:
+-----------------------------------------------------------
+grep -F '"SYSLOG_IDENTIFIER":"sudo"' filebeat_sample.json \
+| grep -Po '"MESSAGE":"\s*[^"]+"' \
+| sort | uniq -c | sort -nr > week7-siem/sudo_commands_top.txt
+-----------------------------------------------------------
+- получен файл sudo_commands_top.txt.
+- составлен учебный таймлайн атаки (пример SSH brute-force → успешный вход → запуск malware → исходящее C2-соединение) → файл timeline.txt.
+
+Полученные артефакты:
+- filebeat_sample.json (образец системных логов в JSON)
+- sudo_commands_top.txt (отчёт топ sudo-команд)
+- timeline.txt (учебный таймлайн инцидента).
