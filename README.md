@@ -53,20 +53,23 @@
 ------------------------------------------
 ### Шаблоны команд (grep/regex) для поиска brute-force SSH
 - IPv4 (устойчивее, чем через awk)
-- grep -h "Failed password" week5-incidents/ssh_auth.log \
+```
+grep -h "Failed password" week5-incidents/ssh_auth.log \
 | grep -Po 'from \K([0-9]{1,3}\.){3}[0-9]{1,3}' \
 | sort | uniq -c | sort -nr
-
+```
 - IPv6 (или «любой адрес после from»)
-- grep -h "Failed password" week5-incidents/ssh_auth.log \
+```
+grep -h "Failed password" week5-incidents/ssh_auth.log \
 | grep -Po 'from \K([0-9a-fA-F:]+)' \
 | sort | uniq -c | sort -nr
-
+```
 - Объединённый (попытка покрыть IPv4/IPv6 одним выражением)
-- grep -h "Failed password" week5-incidents/ssh_auth.log \
+```
+grep -h "Failed password" week5-incidents/ssh_auth.log \
 | grep -Po 'from \K((([0-9]{1,3}\.){3}[0-9]{1,3})|([0-9a-fA-F:]+))' \
 | sort | uniq -c | sort -nr
---------------------------------------------
+```
 ### Шаблон отчёта о подозрительном процессе (Sysmon, EventID=1):
 - Событие: Sysmon EventID=1 (Process Create)
 - Время (UTC): <YYYY-MM-DD HH:MM:SS.mmm>
@@ -106,14 +109,14 @@
 
 ## Выполнено:
 - Имитация работы Filebeat: сбор логов через journalctl в JSON:
--- journalctl -n 80 -o json > week7-siem/filebeat_sample.json
+`journalctl -n 80 -o json > week7-siem/filebeat_sample.json`
 - получен файл filebeat_sample.json с последними системными событиями.
 - Построен отчёт по командам sudo:
-
+```
 grep -F '"SYSLOG_IDENTIFIER":"sudo"' filebeat_sample.json \
 | grep -Po '"MESSAGE":"\s*[^"]+"' \
 | sort | uniq -c | sort -nr > week7-siem/sudo_commands_top.txt
-
+```
 - получен файл sudo_commands_top.txt.
 - составлен учебный таймлайн атаки (пример SSH brute-force → успешный вход → запуск malware → исходящее C2-соединение) → файл timeline.txt.
 
@@ -176,30 +179,28 @@ grep -F '"SYSLOG_IDENTIFIER":"sudo"' filebeat_sample.json \
 
 ## Выполнено: 
 - Генерация ключей (Windows):
------------------------------------
-ssh-keygen -t ed25519 -C "comment"
-# ключи: %USERPROFILE%\.ssh\id_ed25519 (+ .pub)
------------------------------------
+  `ssh-keygen -t ed25519 -C "comment"`
+   ( ключи: %USERPROFILE%\.ssh\id_ed25519 (+ .pub))
+  
 - Установка ключа на сервер (Ubuntu):
------------------------------------
-mkdir -p ~/.ssh
-cat ~/files/id_ed25519.pub >> ~/.ssh/authorized_keys   # или свой .pub
-chmod 700 ~/.ssh
-chmod 600 ~/.ssh/authorized_keys
------------------------------------
+  
+  ```
+  mkdir -p ~/.ssh
+  cat ~/files/keyname.pub >> ~/.ssh/authorized_keys
+  chmod 700 ~/.ssh
+  chmod 600 ~/.ssh/authorized_keys
+  ```
 - Проверка входа с хоста (через Port Forwarding):
------------------------------------
-ssh -p 2222 admin@127.0.0.1
------------------------------------
-- Жёсткое отключение паролей (после проверки ключа):
------------------------------------
-sudo nano /etc/ssh/sshd_config
-# добавить/проверить:
-PubkeyAuthentication yes
-PasswordAuthentication no
-AuthorizedKeysFile .ssh/authorized_keys
-sudo systemctl restart ssh
------------------------------------
+  `ssh -p 2222 admin@127.0.0.1`
+  
+- Жёсткое отключение паролей (после проверки ключа):   `sudo nano /etc/ssh/sshd_config`
+  -- + добавить/проверить:
+    ```
+    PubkeyAuthentication yes
+    PasswordAuthentication no
+    AuthorizedKeysFile .ssh/authorized_keys
+    sudo systemctl restart ssh
+    ```
 
 ## Практика (week2-ssh-key/):
 - ssh_keygen_screenshot.png — скрин генерации ключа 
@@ -207,12 +208,15 @@ sudo systemctl restart ssh
 - sshd_config_keys.txt — строки из /etc/ssh/sshd_config с PubkeyAuthentication и PasswordAuthentication.
 
 ## Быстрые проверки/диагностика:
-
 - Права:
-chmod 700 ~/.ssh; chmod 600 ~/.ssh/authorized_keys; chown -R admin:admin ~/.ssh ~
-
+  
+  ```
+  chmod 700 ~/.ssh
+  chmod 600 ~/.ssh/authorized_keys
+  chown -R admin:admin ~/.ssh ~
+  ```
+  
 - Логи при ошибке:
-sudo tail -f /var/log/auth.log
-
+  `sudo tail -f /var/log/auth.log`
 - Явно указать приватный ключ на клиенте:
-ssh -p 2222 -i %USERPROFILE%\.ssh\%keyname% admin@127.0.0.1
+  `ssh -p 2222 -i %USERPROFILE%\.ssh\%keyname% admin@127.0.0.1`
