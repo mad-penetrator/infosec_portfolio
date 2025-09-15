@@ -130,3 +130,43 @@ grep -F '"SYSLOG_IDENTIFIER":"sudo"' filebeat_sample.json \
 - Составили первый инцидент-таймлайн;
 - В репозитории теперь есть структурированные артефакты по каждой теме.
 --------------------------------------------------------
+# неделя 2 – Харлнинг (День 9–10)
+
+## Теория
+- **Харднинг** — меры по снижению атакуемой поверхности.  
+- Основные шаги для Linux:
+  - запрет root-входа по SSH;  
+  - переход на SSH-ключи вместо паролей;  
+  - использование Fail2Ban для защиты от брутфорса;  
+  - настройка фаервола (UFW).  
+
+### SSH
+- `PermitRootLogin no` — запрещает вход под root.  
+- `PasswordAuthentication no` — отключает пароли (оставляем yes временно, чтобы не потерять доступ).  
+- `AllowUsers admin` — разрешает вход только конкретному пользователю.  
+
+### Fail2Ban
+- Считывает логи (`/var/log/auth.log`).  
+- При превышении `maxretry` → добавляет IP в бан через firewall.  
+- В `jail.local` включили jail `[sshd]` с `enabled = true`.  
+
+### UFW (Uncomplicated Firewall)
+- `sudo ufw enable` — включить firewall.  
+- `sudo ufw allow ssh` — разрешить доступ по SSH (порт 22/tcp).  
+- `sudo ufw allow http` — разрешить доступ по HTTP (порт 80/tcp).  
+- `sudo ufw status verbose` — показать правила.  
+
+---
+
+## Практика
+- Файл [`sshd_config_hardening.txt`](./sshd_config_hardening.txt) — изменённые строки из `/etc/ssh/sshd_config`.  
+- Файл [`fail2ban_status.txt`](./fail2ban_status.txt) — вывод `sudo fail2ban-client status sshd`.  
+- Файл [`ufw_status.txt`](./ufw_status.txt) — вывод `sudo ufw status verbose`.  
+
+---
+
+## Вывод
+- Root-вход отключён.  
+- Fail2Ban отслеживает brute-force на SSH.  
+- UFW ограничивает доступ только разрешёнными портами.  
+- Базовый харднинг сервера выполнен.
