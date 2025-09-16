@@ -1,0 +1,20 @@
+UNIT FILE                                  STATE           VENDOR PRESET
+apparmor.service                           enabled         enabled
+apport-autoreport.service                  static          -
+apport-forward@.service                    static          -
+apport.service                             generated       -
+apt-daily-upgrade.service                  static          -
+apt-daily.service                          static          -
+apt-news.service                           static          -
+autovt@.service                            alias           -
+blk-availability.service                   enabled         enabled
+bolt.service                               static          -
+cloud-config.service                       enabled         enabled
+cloud-final.service                        enabled         enabled
+cloud-init-hotplugd.service                static          -
+cloud-init-local.service                   enabled         enabled
+cloud-init.service                         enabled         enabled
+console-getty.service                      disabled        disabled
+console-setup.service                      enabled         enabled
+container-getty@.service                   static          -
+cron.service                               enabled         enabled
