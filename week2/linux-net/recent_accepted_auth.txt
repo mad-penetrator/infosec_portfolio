@@ -1,0 +1,7 @@
+Sep 15 18:36:18 ubuntu-serv sshd[977]: Accepted password for admin from 10.0.2.2 port 61252 ssh2
+Sep 15 19:34:27 ubuntu-serv sshd[1556]: Accepted publickey for admin from 10.0.2.2 port 60085 ssh2: ED25519 SHA256:GfkmUjmxTS62C/jGjddPRBi+y/YQmsEH+mypvJSC7Nc
+Sep 16 17:37:34 ubuntu-serv sshd[986]: Accepted publickey for admin from 10.0.2.2 port 60951 ssh2: ED25519 SHA256:GfkmUjmxTS62C/jGjddPRBi+y/YQmsEH+mypvJSC7Nc
+Sep 16 17:45:45 ubuntu-serv sshd[1009]: Accepted publickey for admin from 10.0.2.2 port 55971 ssh2: ED25519 SHA256:GfkmUjmxTS62C/jGjddPRBi+y/YQmsEH+mypvJSC7Nc
+Sep 20 17:27:41 ubuntu-serv sshd[982]: Accepted publickey for admin from 10.0.2.2 port 64006 ssh2: ED25519 SHA256:GfkmUjmxTS62C/jGjddPRBi+y/YQmsEH+mypvJSC7Nc
+Sep 20 18:05:06 ubuntu-serv sudo:    admin : TTY=pts/0 ; PWD=/home/admin ; USER=root ; COMMAND=/usr/bin/grep Accepted /var/log/auth.log
+Sep 20 18:07:01 ubuntu-serv sudo:    admin : TTY=pts/0 ; PWD=/home/admin ; USER=root ; COMMAND=/usr/bin/grep -a Accepted /var/log/auth.log
