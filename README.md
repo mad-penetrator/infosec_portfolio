@@ -345,3 +345,100 @@ grep -F '"SYSLOG_IDENTIFIER":"sudo"' filebeat_sample.json \
 - Получены навыки анализа процессов, которые слушают порты
 - Отработаны сценарии: поиск слушателя на 8080 и анализ SSH-сессий
 - Освоена фиксация результатов в файлы для отчёта
+
+---
+
+# Неделя 2 – День 15: Брандмауэры и маршрутизация в Linux
+
+## Теория:
+
+### Брандмауэр:
+- **Firewall (брандмауэр)** — фильтр сетевых пакетов. Решает: пропустить, заблокировать или изменить пакет.
+- Работает через подсистему **netfilter** в ядре Linux.
+- Основные утилиты:
+  - **iptables** — старый инструмент (устаревает).
+  - **nftables** — современный, пришёл на замену iptables.
+  - **ufw** — простая оболочка для управления правилами (Ubuntu).
+
+### Таблицы и цепочки:
+- **filter** — фильтрация пакетов.
+- **nat** — трансляция адресов (маскарадинг, порт-форвардинг).
+- **mangle** — изменение полей пакета.
+- Цепочки:
+  - **INPUT** — пакеты, идущие на сам сервер.
+  - **OUTPUT** — пакеты, исходящие от сервера.
+  - **FORWARD** — транзитные пакеты (через сервер).
+- У каждой цепочки есть **policy** — действие по умолчанию (ACCEPT или DROP).
+
+### Состояния соединений:
+- **NEW** — новое соединение.
+- **ESTABLISHED** — уже установленное соединение.
+- **RELATED** — связанное (например, FTP-data к FTP-control).
+- Используются для stateful-фильтрации.
+
+### Маршрутизация:
+- Таблица маршрутов хранит направления к сетям.
+- **ip_forward** отвечает за возможность сервера пересылать пакеты (быть маршрутизатором).
+- **NAT (маскарадинг)** позволяет клиентам выходить в интернет через один внешний IP.
+
+---
+
+## Практика
+
+### 1. Проверить текущее состояние firewall
+```
+sudo nft list ruleset > nft_ruleset.txt
+sudo iptables -L -n -v > iptables_filter.txt
+sudo iptables -t nat -L -n -v > iptables_nat.txt
+```
+### 2. Посмотреть таблицу маршрутов
+```
+ip route show > ip_route.txt
+```
+### 3. Посмотреть включен ли форвардинг
+```
+sysctl net.ipv4.ip_forward > sysctl_net_forward.txt
+```
+### 4. Создать собственную таблицу с DROP по умолчанию
+```
+sudo nft add table inet demo_table
+sudo nft 'add chain inet demo_table input { type filter hook input priority 0 ; policy drop ; }'
+sudo nft add rule inet demo_table input ct state established,related accept
+sudo nft add rule inet demo_table input tcp dport 22 ct state new accept
+sudo nft list ruleset > nft_ruleset_after.txt
+```
+### 5. Включить NAT (маскарадинг)
+```
+sudo sysctl -w net.ipv4.ip_forward=1
+sudo nft add table ip nat
+sudo nft 'add chain ip nat postrouting { type nat hook postrouting priority 100 ; }'
+sudo nft add rule ip nat postrouting oifname "enp0s3" masquerade
+sudo nft list ruleset > nft_ruleset_nat.txt
+```
+### 6. Зафиксировать состояние портов
+```
+ss -tulnp > ss_before_tests.txt
+```
+### 7. Откат
+```
+sudo nft delete table inet demo_table
+sudo nft delete table ip nat
+sudo sysctl -w net.ipv4.ip_forward=0
+```
+---
+## Итоговые файлы:
+  - `nft_ruleset.txt` — изначальное состояние nftables
+  - `iptables_filter.txt` — правила iptables (filter)
+  - `iptables_nat.txt` — таблица NAT iptables
+  - `ip_route.txt` — таблица маршрутов
+  - `sysctl_net_forward.txt` — статус ip_forward
+  - `nft_ruleset_after.txt` — правила после добавления demo_table
+  - `nft_ruleset_nat.txt` — правила NAT через nftables
+  - `ss_before_tests.txt` — слушающие порты перед тестами
+
+## Итоги:
+- Разобраны принципы работы брандмауэра (iptables/nftables/ufw)
+- Освоено создание таблиц и правил в nftables
+- Понято, как работает stateful-фильтрация соединений
+- Настроен NAT (маскарадинг) и включён форвардинг
+- Научилась откатывать правила и проверять результат
